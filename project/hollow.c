@@ -98,8 +98,29 @@ void findEmpty(int field[][N], int *x, int *y)
 	}
 }
 
-void moveBrick(int field[][N], unsigned char btn, int *x, int *y)
+void winCase(int score)
 {
+	system("cls");                         //System
+	printf("You win!\nScore : %d", score - 1);
+
+}
+
+bool checkWin(int *f, unsigned char btn) {
+	int i;
+	if (*(f + N * N - 1) != 0) return 0;
+	for (i = 0; i < N * N - 2; i++) {
+		printf("\n%d ", *(f + i));
+		if ((*(f + i) > *(f + i + 1)) && (*(f + i + 1) != 0)) {
+			return 0;
+		}
+	}
+	if (btn == 'i') return 1;
+	return 1;
+}
+
+void moveBrick(int field[][N], unsigned char btn, int *x, int *y)  //Rename to smth like work with keyboard
+{
+	int cheatField[N][N] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 0, 15 }, i, j;
 	switch (btn) {
 	case 'a':
 		if (*x < N - 1) {
@@ -125,11 +146,20 @@ void moveBrick(int field[][N], unsigned char btn, int *x, int *y)
 			*y = *y - 1;
 		}
 		break;
+	case 'i':
+		*x = N - 2;
+		*y = N - 1;
+		for (i = 0; i < N; i++) {
+			for (j = 0; j < N; j++) {
+				field[i][j] = cheatField[i][j];
+			}
+		}
 	default:
 		printf("\n\nSosi");
 		break;
 	}
 }
+
 
 int main()
 {
@@ -141,11 +171,18 @@ int main()
 	shuffleField(field);
 	findEmpty(field, &emptyX, &emptyY);
 	printField(field, emptyX, emptyY, &score);
+
 	while (true) {
 		btn = getch();     //conio.h
 		moveBrick(field, btn, &emptyX, &emptyY);
 		printField(field, emptyX, emptyY, &score);
+		if (checkWin(*field, btn) == 1) {
+			winCase(score);
+			break;
+		}
 	}
+
+
 	system("pause");
 	return 0;
 }
