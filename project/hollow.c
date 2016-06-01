@@ -22,14 +22,14 @@ bool checkSolution(int field[][N])
 		if (field[i / N][i%N] == 0)
 			counter += (i / N) + 1;
 	}
-	printf("\n %d : ", counter);
+
 	if (counter % 2 == 0) {
 		return 0;
 	}
 	return 1;
 }
 
-void shuffleField(int field[][N])
+void initializeField(int field[][N])
 {
 	int i, j;
 
@@ -38,7 +38,13 @@ void shuffleField(int field[][N])
 			field[i][j] = i * 4 + j;
 		}
 	}
-	
+}
+
+
+void shuffleField(int field[][N])
+{
+	int i, j;
+
 	for (i = 0; i < N; i++) {
 		for (j = 0; j < N; j++) {
 			int iRand = rand() % N, jRand = rand() % N;
@@ -46,7 +52,7 @@ void shuffleField(int field[][N])
 			if (iRand != i || jRand != j) {
 				swap(&field[i][j], &field[iRand][jRand]);
 			}
-			else 
+			else
 				j--;
 		}
 	}
@@ -67,8 +73,8 @@ void shuffleField(int field[][N])
 int main()
 {
 	srand(time(NULL));
-	int field[N][N] = {4, 8, 14, 5, 10, 0, 6, 1, 13, 2, 11, 7, 15, 12, 3, 9};  //Main field 
-	//checkSolution(field);
+	int field[N][N];  //Main field
+	initializeField(field);
 	shuffleField(field);
 	system("pause");
 	return 0;
